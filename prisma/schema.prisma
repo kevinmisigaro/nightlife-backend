@@ -1,0 +1,75 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Event {
+  id Int @default(autoincrement()) @id
+  event_date DateTime 
+  clubLocation Club @relation(fields: [club_id], references: [id] )
+  club_id Int
+  entrance_fee Int?
+  description String?
+  event_image String
+  event_video String?
+  headliner String?
+  alcohol_price Int?
+  active Boolean
+  event EventAttendants?
+  created_at DateTime
+}
+
+model Club {
+  id Int @default(autoincrement()) @id
+  name String
+  event Event?
+  entrance_fee Int?
+  description String?
+  alcohol_price Int?
+  location String?
+  active Boolean @default(true)
+  club ClubAttendants?
+  created_at DateTime
+}
+
+model User {
+  id Int @default(autoincrement()) @id
+  name String
+  email String @unique
+  password String
+  phone String
+  active Boolean @default(true)
+  created_at DateTime
+  current_location String?
+  eventAttendant EventAttendants?
+  clubAttendant ClubAttendants?
+}
+
+model Friends {
+  id Int @default(autoincrement()) @id
+  user_id Int
+  follower_id Int
+  created_at  DateTime
+}
+
+model EventAttendants {
+  id Int @default(autoincrement()) @id
+  event Event @relation(fields: [event_id], references: [id] )
+  event_id Int
+  attendant User @relation(fields: [attendant_id], references: [id])
+  attendant_id Int
+  created_at DateTime
+}
+
+model ClubAttendants {
+  id Int @default(autoincrement()) @id
+  club Club @relation(fields: [club_id], references: [id] )
+  club_id Int
+  attendant User @relation(fields: [attendant_id], references: [id])
+  attendant_id Int
+  created_at DateTime
+}
