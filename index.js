@@ -4,6 +4,10 @@ const cors = require('cors')
 const app = express()
 app.use(cors())
 
+const client = require('./database')
+
+client.connect()
+
 const clubRouter = require('./routes/club.routes')
 
 app.use('/clubs', clubRouter)
