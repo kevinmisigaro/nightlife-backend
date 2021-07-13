@@ -1,5 +1,4 @@
 const express = require('express')
-const port = 3000
 const cors = require('cors')
 
 const app = express()
@@ -13,6 +12,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.listen(port, () => {
+app.listen(process.port.PORT || 3000, () => {
   console.log(`Example app listening at http://localhost:${port}`)
 })
