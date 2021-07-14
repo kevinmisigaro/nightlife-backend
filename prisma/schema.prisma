@@ -1,6 +1,7 @@
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 generator client {
@@ -9,7 +10,7 @@ generator client {
 
 model Event {
   id Int @default(autoincrement()) @id
-  event_date DateTime 
+  event_date Int 
   clubLocation Club @relation(fields: [club_id], references: [id] )
   club_id Int
   entrance_fee Int?
@@ -20,7 +21,7 @@ model Event {
   alcohol_price Int?
   active Boolean
   event EventAttendants?
-  created_at DateTime
+  created_at Int
 }
 
 model Club {
@@ -33,7 +34,8 @@ model Club {
   location String?
   active Boolean @default(true)
   club ClubAttendants?
-  created_at DateTime
+  created_at Int
+  image String?
 }
 
 model User {
@@ -43,7 +45,7 @@ model User {
   password String
   phone String
   active Boolean @default(true)
-  created_at DateTime
+  created_at Int
   current_location String?
   eventAttendant EventAttendants?
   clubAttendant ClubAttendants?
@@ -53,7 +55,7 @@ model Friends {
   id Int @default(autoincrement()) @id
   user_id Int
   follower_id Int
-  created_at  DateTime
+  created_at  Int
 }
 
 model EventAttendants {
@@ -62,7 +64,7 @@ model EventAttendants {
   event_id Int
   attendant User @relation(fields: [attendant_id], references: [id])
   attendant_id Int
-  created_at DateTime
+  created_at Int
 }
 
 model ClubAttendants {
@@ -71,5 +73,5 @@ model ClubAttendants {
   club_id Int
   attendant User @relation(fields: [attendant_id], references: [id])
   attendant_id Int
-  created_at DateTime
+  created_at Int
 }
