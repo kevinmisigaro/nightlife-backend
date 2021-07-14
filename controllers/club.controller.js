@@ -118,7 +118,7 @@ exports.deleteClub = async (req, res) => {
         },
     });
 
-    if (!deleteClub || deletedClub.length == 0) {
+    if (!deletedClub || deletedClub.length == 0) {
         res.status(404).json({
             message: "Club not found"
         });

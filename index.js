@@ -14,8 +14,10 @@ app.use(fileUpload({
 }))
 
 const clubRouter = require('./routes/club.routes')
+const userRouter = require('./routes/user.routes')
 
 app.use('/clubs', clubRouter)
+app.use('/user', userRouter)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

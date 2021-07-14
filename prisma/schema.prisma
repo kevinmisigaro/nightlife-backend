@@ -41,14 +41,15 @@ model Club {
 model User {
   id Int @default(autoincrement()) @id
   name String
-  email String @unique
+  email String? @unique
   password String
-  phone String
+  phone String @unique
   active Boolean @default(true)
   created_at Int
   current_location String?
   eventAttendant EventAttendants?
   clubAttendant ClubAttendants?
+  profile_image String?
 }
 
 model Friends {
