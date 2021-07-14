@@ -38,6 +38,12 @@ model Club {
   image String?
 }
 
+enum Role {
+  USER
+  ADMIN
+  CLUB_OWNER
+}
+
 model User {
   id Int @default(autoincrement()) @id
   name String
@@ -50,6 +56,7 @@ model User {
   eventAttendant EventAttendants?
   clubAttendant ClubAttendants?
   profile_image String?
+  role Role @default(USER)
 }
 
 model Friends {
