@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
-    "heroku-postbuild": "prisma generate && primsa migrate"
+    "heroku-postbuild": "prisma generate && prisma migrate"
   },
   "author": "Kevin Misigaro",
   "license": "ISC",
