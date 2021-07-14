@@ -19,7 +19,7 @@ model Event {
   event_video String?
   headliner String?
   alcohol_price Int?
-  active Boolean
+  active Boolean @default(true)
   event EventAttendants?
   created_at Int
 }

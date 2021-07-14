@@ -13,6 +13,12 @@ app.use(bodyParser.json());
 
 const prisma = new prismaClient.PrismaClient();
 
+//get all users
+exports.getAllUsers = async (req,res) => {
+    const allUsers = await prisma.user.findMany();
+    res.status(200).json(allUsers);
+}
+
 //register user
 exports.registerUser = async (req, res) => {
   let avatar;
@@ -95,52 +101,52 @@ exports.deleteUser = async (req, res) => {
 
 //get one user
 exports.findUser = async (req, res) => {
-    const {id} = req.params
+  const { id } = req.params;
 
-    const singleUser = await prisma.user.findFirst({
-        where: {
-          id: Number(id),
-        },
-      })
-      
-      if (!singleUser || singleUser.length == 0) {
-        res.status(404).json({
-            message: "User not found"
-        });
-    } else {
-        res.status(200).json(singleUser);
-    }
-}
+  const singleUser = await prisma.user.findFirst({
+    where: {
+      id: Number(id),
+    },
+  });
+
+  if (!singleUser || singleUser.length == 0) {
+    res.status(404).json({
+      message: "User not found",
+    });
+  } else {
+    res.status(200).json(singleUser);
+  }
+};
 
 //update User
-exports.updateUser = async (req,res) => {
-    const {id} = req.params
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
 
-    let avatar;
+  let avatar;
 
-    if (req.files) {
-        avatar = req.files.image;
-        avatar.mv("/uploads/user/" + avatar.name);
-    }
+  if (req.files) {
+    avatar = req.files.image;
+    avatar.mv("/uploads/user/" + avatar.name);
+  }
 
-    const updatedUser = await prisma.club.update({
-        where: {
-            id: Number(id),
-        },
-        data: {
-            name: req.body.name,
-            phone: req.body.phone,
-            email: req.body.email,
-            current_location: req.body.location,
-            profile_image: !req.files ? null : `/uploads/user/${avatar.name}`,
-        },
-    })
+  const updatedUser = await prisma.club.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      name: req.body.name,
+      phone: req.body.phone,
+      email: req.body.email,
+      current_location: req.body.location,
+      profile_image: !req.files ? null : `/uploads/user/${avatar.name}`,
+    },
+  });
 
-    if (!updatedUser || updatedUser.length == 0) {
-        res.status(404).json({
-            message: "User not found"
-        });
-    } else {
-        res.status(301).json(updatedUser);
-    }
-}
+  if (!updatedUser || updatedUser.length == 0) {
+    res.status(404).json({
+      message: "User not found",
+    });
+  } else {
+    res.status(301).json(updatedUser);
+  }
+};
