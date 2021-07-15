@@ -158,3 +158,19 @@ exports.changeStatus = async (req, res) => {
         res.status(301).json(updatedClub)
     }
 }
+
+exports.userAtClub = async (req, res) => {
+    const attendant = await prisma.clubAttendants.create({
+      data: {
+        club_id: req.body.club_id,
+        attendant_id: req.body.user_id,
+        created_at: moment().valueOf()
+      }
+    })
+  
+    if(!attendant){
+      res.status(404).json({message:"Failed to confirm attendance"})
+    } else{
+      res.status(201).json({message:"Attendance confirmed"})
+    }
+  }

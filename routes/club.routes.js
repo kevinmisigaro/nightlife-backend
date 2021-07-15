@@ -9,5 +9,6 @@ urlRoutes.get('/find/:id', controller.findClub)
 urlRoutes.patch('/update/:id', controller.updateClub)
 urlRoutes.patch('/status/:id', controller.changeStatus)
 urlRoutes.delete('/delete/:id', controller.deleteClub)
+urlRoutes.post('/attend',controller.userAtClub)
 
 module.exports = urlRoutes

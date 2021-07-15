@@ -121,3 +121,19 @@ exports.changeStatus = async (req, res) => {
       res.status(301).json(updatedEvent)
   }
 }
+
+exports.userAtEvent = async (req, res) => {
+  const attendant = await prisma.eventAttendants.create({
+    data: {
+      event_id: req.body.event_id,
+      attendant_id: req.body.user_id,
+      created_at: moment().valueOf()
+    }
+  })
+
+  if(!attendant){
+    res.status(404).json({message:"Failed to confirm attendance"})
+  } else{
+    res.status(201).json({message:"Attendance confirmed"})
+  }
+}
