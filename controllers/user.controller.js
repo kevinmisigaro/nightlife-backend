@@ -150,3 +150,18 @@ exports.updateUser = async (req, res) => {
     res.status(301).json(updatedUser);
   }
 };
+
+exports.followAction = async (req, res) => {
+    const relationship = await prisma.friend.create({
+      data:{
+        user_id: req.body.user_id,
+        follower_id: req.body.follower_id
+      }
+    })
+
+    if(!relationship){
+      res.status(404).json({message: "Failed to follow"})
+    } else {
+      res.status(201).json({message: "Able to follow"})
+    }
+}

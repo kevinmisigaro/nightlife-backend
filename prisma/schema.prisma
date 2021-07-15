@@ -9,33 +9,33 @@ generator client {
 }
 
 model Event {
-  id Int @default(autoincrement()) @id
-  event_date Int 
-  clubLocation Club @relation(fields: [club_id], references: [id] )
-  club_id Int
-  entrance_fee Int?
-  description String?
-  event_image String
-  event_video String?
-  headliner String?
-  alcohol_price Int?
-  active Boolean @default(true)
-  event EventAttendants?
-  created_at Int
+  id              Int                 @default(autoincrement()) @id
+  event_date      Int 
+  clubLocation    Club                @relation(fields: [club_id], references: [id] )
+  club_id         Int
+  entrance_fee    Int?
+  description     String?
+  event_image     String
+  event_video     String?
+  headliner       String?
+  alcohol_price   Int?
+  active          Boolean             @default(true)
+  event           EventAttendants[]
+  created_at      Int
 }
 
 model Club {
-  id Int @default(autoincrement()) @id
-  name String
-  event Event?
-  entrance_fee Int?
-  description String?
-  alcohol_price Int?
-  location String?
-  active Boolean @default(true)
-  club ClubAttendants?
-  created_at Int
-  image String?
+  id              Int @default(autoincrement()) @id
+  name            String
+  event           Event?
+  entrance_fee    Int?
+  description     String?
+  alcohol_price   Int?
+  location        String?
+  active          Boolean @default(true)
+  attendants      ClubAttendants[]
+  created_at      Int
+  image           String?
 }
 
 enum Role {
@@ -45,41 +45,45 @@ enum Role {
 }
 
 model User {
-  id Int @default(autoincrement()) @id
-  name String
-  email String? @unique
-  password String
-  phone String @unique
-  active Boolean @default(true)
-  created_at Int
-  current_location String?
-  eventAttendant EventAttendants?
-  clubAttendant ClubAttendants?
-  profile_image String?
-  role Role @default(USER)
+  id                  Int       @default(autoincrement()) @id
+  name                String
+  email               String?   @unique
+  password            String
+  phone               String    @unique
+  active              Boolean   @default(true)
+  created_at          Int
+  current_location    String?
+  events              EventAttendants[]
+  clubs               ClubAttendants[]
+  profile_image       String?
+  role                Role      @default(USER)
+  owner               Friend[]  @relation("Friend_user_idToUser")
+  followers           Friend[]  @relation("Friend_follower_idToUser")
 }
 
-model Friends {
-  id Int @default(autoincrement()) @id
-  user_id Int
-  follower_id Int
-  created_at  Int
+model Friend {
+  id            Int   @default(autoincrement()) @id
+  user_id       Int
+  follower_id   Int
+  user          User @relation("Friend_user_idToUser", fields: [user_id], references: [id])
+  follower      User @relation("Friend_follower_idToUser", fields: [follower_id], references: [id])
+  created_at    Int
 }
 
 model EventAttendants {
-  id Int @default(autoincrement()) @id
-  event Event @relation(fields: [event_id], references: [id] )
-  event_id Int
-  attendant User @relation(fields: [attendant_id], references: [id])
-  attendant_id Int
-  created_at Int
+  id            Int @default(autoincrement()) @id
+  event         Event? @relation(fields: [event_id], references: [id] )
+  event_id      Int?
+  attendant     User? @relation(fields: [attendant_id], references: [id])
+  attendant_id  Int?
+  created_at    Int
 }
 
 model ClubAttendants {
-  id Int @default(autoincrement()) @id
-  club Club @relation(fields: [club_id], references: [id] )
-  club_id Int
-  attendant User @relation(fields: [attendant_id], references: [id])
-  attendant_id Int
-  created_at Int
+  id            Int @default(autoincrement()) @id
+  club          Club? @relation(fields: [club_id], references: [id] )
+  club_id       Int?
+  attendant     User? @relation(fields: [attendant_id], references: [id])
+  attendant_id  Int?
+  created_at    Int
 }

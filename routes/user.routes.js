@@ -9,5 +9,6 @@ urlRoutes.delete('/delete/:id', controller.deleteUser)
 urlRoutes.get('/find/:id', controller.findUser)
 urlRoutes.patch('/update/:id', controller.updateUser)
 urlRoutes.get('/', controller.getAllUsers)
+urlRoutes.post('/follow', controller.followAction)
 
 module.exports = urlRoutes
