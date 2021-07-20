@@ -129,8 +129,8 @@ exports.deleteClub = async (req, res) => {
     }
 };
 
-//change status of club
-exports.changeStatus = async (req, res) => {
+//change active status of club
+exports.changeActiveStatus = async (req, res) => {
     const {
         id
     } = req.params
@@ -153,6 +153,34 @@ exports.changeStatus = async (req, res) => {
     if (!updatedClub || updatedClub.length == 0) {
         res.status(404).json({
             message: "Failed to update club"
+        })
+    } else {
+        res.status(301).json(updatedClub)
+    }
+}
+
+//change hot status of a club
+exports.changeHotStatusOfClub = async (req, res) => {
+    const { id } = req.params
+
+    const clubToUpdate = await prisma.club.findFirst({
+        where: {
+            id: Number(id),
+        },
+    })
+
+    const updatedClub = await prisma.club.update({
+        where: {
+            id: clubToUpdate.id
+        },
+        data: {
+            hot: clubToUpdate.hot ? false : true
+        }
+    })
+
+    if (!updatedClub || updatedClub.length == 0) {
+        res.status(404).json({
+            message: "Failed to update club hot status"
         })
     } else {
         res.status(301).json(updatedClub)
