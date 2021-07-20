@@ -176,10 +176,13 @@ exports.followAction = async (req, res) => {
 exports.showFriendsListForUser = async (req, res) => {
   const { id } = req.params;
 
-  const singleUser = await prisma.user.findUnique({
+  const singleUser = await prisma.friend.findMany({
     where: {
-      id: Number(id)
+      user_id: Number(id)
     },
+    select: {
+      follower: true
+    }
   })
 
   if (!singleUser || singleUser.length == 0) {
