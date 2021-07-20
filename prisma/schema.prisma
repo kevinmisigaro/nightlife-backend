@@ -66,16 +66,16 @@ model User {
   clubs               ClubAttendants[]
   profile_image       String?
   role                Role      @default(USER)
-  owner               Friend[]  @relation("Friend_user_idToUser")
-  followers           Friend[]  @relation("Friend_follower_idToUser")
+  owners             Friend[]  @relation("Owners")
+  followers           Friend[]  @relation("Followers")
 }
 
 model Friend {
   id            Int   @default(autoincrement()) @id
   user_id       Int
   follower_id   Int
-  user          User @relation("Friend_user_idToUser", fields: [user_id], references: [id])
-  follower      User @relation("Friend_follower_idToUser", fields: [follower_id], references: [id])
+  user          User? @relation("Owners", fields: [user_id], references: [id])
+  follower      User? @relation("Followers", fields: [follower_id], references: [id])
   created_at    Int
 }
 

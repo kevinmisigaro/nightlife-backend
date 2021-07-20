@@ -10,5 +10,6 @@ urlRoutes.get('/find/:id', controller.findUser)
 urlRoutes.patch('/update/:id', controller.updateUser)
 urlRoutes.get('/', controller.getAllUsers)
 urlRoutes.post('/follow', controller.followAction)
+urlRoutes.get('/friends/:id', controller.showFriendsListForUser)
 
 module.exports = urlRoutes

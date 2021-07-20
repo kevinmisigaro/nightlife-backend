@@ -2,6 +2,7 @@ const prismaClient = require("@prisma/client");
 const express = require("express");
 const bodyParser = require("body-parser");
 const moment = require("moment");
+const bcrypt = require("bcrypt")
 
 const app = express();
 app.use(
@@ -28,12 +29,14 @@ exports.registerUser = async (req, res) => {
     avatar.mv("/uploads/user/" + avatar.name);
   }
 
+  const salt = await bcrypt.genSalt(10)
+
   const createdUser = await prisma.user.create({
     data: {
       name: req.body.name,
       phone: req.body.phone,
       email: req.body.email,
-      password: req.body.password,
+      password: await bcrypt.hash(req.body.password, salt),
       created_at: Number(moment().valueOf()),
       profile_image: !req.files ? null : `/uploads/user/${avatar.name}`,
     },
@@ -151,11 +154,14 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+
+//follow friend
 exports.followAction = async (req, res) => {
     const relationship = await prisma.friend.create({
       data:{
-        user_id: req.body.user_id,
-        follower_id: req.body.follower_id
+        user_id: Number(req.body.user_id),
+        follower_id: Number(req.body.follower_id),
+        created_at: moment().valueOf()
       }
     })
 
@@ -164,4 +170,23 @@ exports.followAction = async (req, res) => {
     } else {
       res.status(201).json({message: "Able to follow"})
     }
+}
+
+
+exports.showFriendsListForUser = async (req, res) => {
+  const { id } = req.params;
+
+  const singleUser = await prisma.user.findUnique({
+    where: {
+      id: Number(id)
+    },
+  })
+
+  if (!singleUser || singleUser.length == 0) {
+    res.status(404).json({
+      message: "User not found",
+    });
+  } else {
+    res.status(200).json(singleUser);
+  }
 }
