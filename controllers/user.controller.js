@@ -20,6 +20,36 @@ exports.getAllUsers = async (req,res) => {
     res.status(200).json(allUsers);
 }
 
+//get clubs, events and friends
+exports.getAllDetails = async (req,res) => {
+  const allClubs = await prisma.club.findMany();
+  const allEvents = await prisma.event.findMany();
+  var allFollowers;
+
+  const { id } = req.params;
+
+  const users = await prisma.friend.findMany({
+    where: {
+      user_id: Number(id)
+    },
+    select: {
+      follower: true
+    }
+  })
+
+  if (!users || users.length == 0) {
+    allFollowers = []
+  } else {
+    allFollowers = users
+  }
+  
+  res.status(200).json({
+    clubs: allClubs,
+    events: allEvents,
+    friends: allFollowers
+  });
+}
+
 //register user
 exports.registerUser = async (req, res) => {
   let avatar;
@@ -172,7 +202,7 @@ exports.followAction = async (req, res) => {
     }
 }
 
-
+//friends list
 exports.showFriendsListForUser = async (req, res) => {
   const { id } = req.params;
 
